@@ -13,7 +13,7 @@ module.exports = class StatsPoller extends EventEmitter {
    * @param {IpfsApi} ipfs
    * @param {Debugger} debug
    */
-  constructor (ipfs, frequency = 1000, logger) {
+  constructor (ipfs, frequency = 3000, logger) {
     super()
 
     this.ipfs = ipfs
@@ -57,7 +57,7 @@ module.exports = class StatsPoller extends EventEmitter {
 
       setTimeout(() => {
         this._pollNodeStats()
-      }, 1000)
+      }, this.frequency)
     }).catch(this._error.bind(this))
   }
 
@@ -75,7 +75,7 @@ module.exports = class StatsPoller extends EventEmitter {
         this._handlePeers(peers)
         setTimeout(() => {
           this._pollPeerStats()
-        }, 1000)
+        }, this.frequency)
       })
       .catch(this._error.bind(this))
   }
