@@ -1,6 +1,8 @@
 const EventEmitter = require('events').EventEmitter
 const lookupPretty = require('ipfs-geoip').lookupPretty
 
+const allOptions = ['peers', 'node']
+
 /**
  * It's a Stats Poller.
  * @extends EventEmitter
@@ -11,26 +13,35 @@ module.exports = class StatsPoller extends EventEmitter {
    * @param {IpfsApi} ipfs
    * @param {Debugger} debug
    */
-  constructor (ipfs, debug) {
+  constructor (ipfs, frequency = 1000, logger) {
     super()
+
     this.ipfs = ipfs
-    this.debug = debug
-    this.shouldPoll = false
+    this.frequency = frequency
+    this.logger = logger
+
     this.statsCache = {}
     this.locationsCache = {}
+    this.poll = {
+      peers: false,
+      node: false
+    }
   }
 
   _error (error) {
-    this.debug(error.stack)
+    if (error.stack) {
+      this.logger(error.stack)
+    } else {
+      this.logger(error)
+    }
   }
 
   /**
-   * Poll stats which do not require an Internet
-   * connection to work.
+   * Poll node stats.
    * @return {Void}
    */
-  _pollOfflineStats () {
-    if (!this.shouldPoll) {
+  _pollNodeStats () {
+    if (!this.poll.node) {
       return
     }
 
@@ -45,18 +56,17 @@ module.exports = class StatsPoller extends EventEmitter {
       this.emit('change', this.statsCache)
 
       setTimeout(() => {
-        this._pollOfflineStats()
+        this._pollNodeStats()
       }, 1000)
     }).catch(this._error.bind(this))
   }
 
   /**
-   * Poll stats which require an Internet connection
-   * to work.
+   * Poll peers.
    * @return {Void}
    */
-  _pollOnlineStats () {
-    if (!this.shouldPoll) {
+  _pollPeerStats () {
+    if (!this.options.peers) {
       return
     }
 
@@ -64,15 +74,15 @@ module.exports = class StatsPoller extends EventEmitter {
       .then((peers) => {
         this._handlePeers(peers)
         setTimeout(() => {
-          this._pollOnlineStats()
+          this._pollPeerStats()
         }, 1000)
       })
       .catch(this._error.bind(this))
   }
 
   _poller () {
-    this._pollOfflineStats()
-    this._pollOnlineStats()
+    this._pollNodeStats()
+    this._pollPeerStats()
   }
 
   _handlePeers (raw) {
@@ -118,18 +128,20 @@ module.exports = class StatsPoller extends EventEmitter {
 
   /**
    * Stops the poller.
+   * @param {Array} opts
    * @return {Void}
    */
-  stop () {
-    this.shouldPoll = false
+  stop (opts = allOptions) {
+    opts.forEach(opt => { this.options[opt] = false })
   }
 
   /**
    * Starts the poller.
+   * @param {Array} opts
    * @return {Void}
    */
-  start () {
-    this.shouldPoll = true
+  start (opts = allOptions) {
+    opts.forEach(opt => { this.options[opt] = true })
     this._poller()
   }
 }
