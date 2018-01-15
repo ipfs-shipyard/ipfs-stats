@@ -1,0 +1,27 @@
+{
+  "name": "ipfs-stats",
+  "version": "1.0.0-beta1",
+  "description": "IPFS Stats Poller",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hacdias/ipfs-stats.git"
+  },
+  "keywords": [
+    "ipfs",
+    "stats",
+    "poller",
+    "decentralized",
+    "events",
+    "geoip"
+  ],
+  "author": "Henrique Dias <hacdias@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hacdias/ipfs-stats/issues"
+  },
+  "homepage": "https://github.com/hacdias/ipfs-stats#readme",
+  "dependencies": {
+    "ipfs-geoip": "^2.3.0"
+  }
+}

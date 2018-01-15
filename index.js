@@ -1,11 +1,11 @@
-import {EventEmitter} from 'events'
-import {lookupPretty} from 'ipfs-geoip'
+const EventEmitter = require('events').EventEmitter
+const lookupPretty = require('ipfs-geoip').lookupPretty
 
 /**
  * It's a Stats Poller.
  * @extends EventEmitter
  */
-export default class StatsPoller extends EventEmitter {
+module.exports = class StatsPoller extends EventEmitter {
   /**
    * Stats Poller constructor.
    * @param {IpfsApi} ipfs
