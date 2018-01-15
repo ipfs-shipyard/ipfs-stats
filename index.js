@@ -66,7 +66,7 @@ module.exports = class StatsPoller extends EventEmitter {
    * @return {Void}
    */
   _pollPeerStats () {
-    if (!this.options.peers) {
+    if (!this.poll.peers) {
       return
     }
 
