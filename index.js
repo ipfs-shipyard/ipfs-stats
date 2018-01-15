@@ -132,7 +132,7 @@ module.exports = class StatsPoller extends EventEmitter {
    * @return {Void}
    */
   stop (opts = allOptions) {
-    opts.forEach(opt => { this.options[opt] = false })
+    opts.forEach(what => { this.poll[what] = false })
   }
 
   /**
@@ -141,7 +141,7 @@ module.exports = class StatsPoller extends EventEmitter {
    * @return {Void}
    */
   start (opts = allOptions) {
-    opts.forEach(opt => { this.options[opt] = true })
+    opts.forEach(what => { this.poll[what] = true })
     this._poller()
   }
 }
