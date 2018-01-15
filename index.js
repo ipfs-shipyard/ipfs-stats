@@ -16,16 +16,20 @@ module.exports = class StatsPoller extends EventEmitter {
   constructor (ipfs, frequency = 3000, logger) {
     super()
 
+    // Start the variables!
     this.ipfs = ipfs
     this.frequency = frequency
     this.logger = logger
-
     this.statsCache = {}
     this.locationsCache = {}
     this.poll = {
       peers: false,
       node: false
     }
+
+    // Start the engines!
+    this._pollNodeStats()
+    this._pollPeerStats()
   }
 
   _error (error) {
@@ -41,8 +45,12 @@ module.exports = class StatsPoller extends EventEmitter {
    * @return {Void}
    */
   _pollNodeStats () {
+    const next = () => {
+      setTimeout(() => { this._pollNodeStats() }, this.frequency)
+    }
+
     if (!this.poll.node) {
-      return
+      return next()
     }
 
     Promise.all([
@@ -55,9 +63,7 @@ module.exports = class StatsPoller extends EventEmitter {
       this.statsCache.repo = repo
       this.emit('change', this.statsCache)
 
-      setTimeout(() => {
-        this._pollNodeStats()
-      }, this.frequency)
+      next()
     }).catch(this._error.bind(this))
   }
 
@@ -66,23 +72,18 @@ module.exports = class StatsPoller extends EventEmitter {
    * @return {Void}
    */
   _pollPeerStats () {
-    if (!this.poll.peers) {
-      return
+    const next = () => {
+      setTimeout(() => { this._pollPeerStats() }, this.frequency)
     }
 
-    this.ipfs.swarm.peers()
-      .then((peers) => {
-        this._handlePeers(peers)
-        setTimeout(() => {
-          this._pollPeerStats()
-        }, this.frequency)
-      })
-      .catch(this._error.bind(this))
-  }
+    if (!this.poll.peers) {
+      return next()
+    }
 
-  _poller () {
-    this._pollNodeStats()
-    this._pollPeerStats()
+    this.ipfs.swarm.peers().then((peers) => {
+      this._handlePeers(peers)
+      next()
+    }).catch(this._error.bind(this))
   }
 
   _handlePeers (raw) {
@@ -126,6 +127,10 @@ module.exports = class StatsPoller extends EventEmitter {
     })
   }
 
+  get stats () {
+    return this.statsCache
+  }
+
   /**
    * Stops the poller.
    * @param {Array} opts
@@ -142,6 +147,5 @@ module.exports = class StatsPoller extends EventEmitter {
    */
   start (opts = allOptions) {
     opts.forEach(what => { this.poll[what] = true })
-    this._poller()
   }
 }
