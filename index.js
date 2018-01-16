@@ -16,6 +16,15 @@ module.exports = class StatsPoller extends EventEmitter {
   constructor (ipfs, frequency = 3000, logger) {
     super()
 
+    if (typeof frequency === 'function') {
+      logger = frequency
+      frequency = 3000
+    }
+
+    if (typeof logger !== 'function') {
+      logger = console.error
+    }
+
     // Start the variables!
     this.ipfs = ipfs
     this.frequency = frequency
@@ -32,6 +41,11 @@ module.exports = class StatsPoller extends EventEmitter {
     this._pollPeerStats()
   }
 
+  /**
+   * Logs the erros using the provided logger function.
+   * @private
+   * @param {Error} error
+   */
   _error (error) {
     if (error.stack) {
       this.logger(error.stack)
@@ -42,6 +56,7 @@ module.exports = class StatsPoller extends EventEmitter {
 
   /**
    * Poll node stats.
+   * @private
    * @return {Void}
    */
   _pollNodeStats () {
@@ -69,6 +84,7 @@ module.exports = class StatsPoller extends EventEmitter {
 
   /**
    * Poll peers.
+   * @private
    * @return {Void}
    */
   _pollPeerStats () {
@@ -86,6 +102,11 @@ module.exports = class StatsPoller extends EventEmitter {
     }).catch(this._error.bind(this))
   }
 
+  /**
+   * Handle the Peers.
+   * @private
+   * @param {Object} raw - Raw Peers
+   */
   _handlePeers (raw) {
     const peers = []
     raw = raw.sort((a, b) => a.peer.toB58String() > b.peer.toB58String())
@@ -115,6 +136,11 @@ module.exports = class StatsPoller extends EventEmitter {
     this.emit('change', this.statsCache)
   }
 
+  /**
+   * Handle the raw ID.
+   * @private
+   * @param {Object} raw - Raw ID
+   */
   _handleId (raw) {
     this.statsCache.node = raw
     this.statsCache.node.location = 'Unknown'
@@ -127,6 +153,9 @@ module.exports = class StatsPoller extends EventEmitter {
     })
   }
 
+  /**
+   * Stats
+   */
   get stats () {
     return this.statsCache
   }
