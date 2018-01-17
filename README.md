@@ -18,8 +18,7 @@ npm install --save ipfs-stats
 #### `new StatsPoller(ipfs, [frequency, logger])`
 
 - `ipfs` Object. [IPFS API Object](https://github.com/ipfs/js-ipfs-api).
-- `frequency` Integer (optional). The frequency, in milliseconds, to push new stats. Defaults to `3000`.
-- `logger` Function (optional). The logger to log errors. Defaults to `console.error`.
+- `frequency` Integer (optional). The frequency, in milliseconds, to push new stats. Defaults to `1000`.
 
 #### Properties
 
@@ -36,3 +35,4 @@ npm install --save ipfs-stats
 #### Events
 
 - `change`
+- `error`

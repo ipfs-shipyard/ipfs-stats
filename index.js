@@ -1,5 +1,7 @@
 const EventEmitter = require('events').EventEmitter
 const lookupPretty = require('ipfs-geoip').lookupPretty
+const debug = require('debug')('stats-poller')
+const LocationsPoller = require('./locations')
 
 const allOptions = ['peers', 'node']
 
@@ -11,26 +13,16 @@ module.exports = class StatsPoller extends EventEmitter {
   /**
    * Stats Poller constructor.
    * @param {IpfsApi} ipfs
-   * @param {Debugger} debug
    */
-  constructor (ipfs, frequency = 3000, logger) {
+  constructor (ipfs, frequency = 1000) {
     super()
-
-    if (typeof frequency === 'function') {
-      logger = frequency
-      frequency = 3000
-    }
-
-    if (typeof logger !== 'function') {
-      logger = console.error
-    }
 
     // Start the variables!
     this.ipfs = ipfs
     this.frequency = frequency
-    this.logger = logger
     this.statsCache = {}
-    this.locationsCache = {}
+    this.locations = new LocationsPoller(ipfs)
+
     this.poll = {
       peers: false,
       node: false
@@ -39,6 +31,11 @@ module.exports = class StatsPoller extends EventEmitter {
     // Start the engines!
     this._pollNodeStats()
     this._pollPeerStats()
+
+    debug('Fetching self ID')
+    this.ipfs.id()
+      .then((id) => {this._handleId(id)})
+      .catch(this._error.bind(this))
   }
 
   /**
@@ -47,10 +44,11 @@ module.exports = class StatsPoller extends EventEmitter {
    * @param {Error} error
    */
   _error (error) {
+    this.emit('error', error)
     if (error.stack) {
-      this.logger(error.stack)
+      debug(error.stack)
     } else {
-      this.logger(error)
+      debug(error)
     }
   }
 
@@ -68,12 +66,12 @@ module.exports = class StatsPoller extends EventEmitter {
       return next()
     }
 
+    debug('Polling node stats')
+
     Promise.all([
-      this.ipfs.id(),
       this.ipfs.stats.bw(),
       this.ipfs.repo.stat()
-    ]).then(([id, bw, repo]) => {
-      this._handleId(id)
+    ]).then(([bw, repo]) => {
       this.statsCache.bw = bw
       this.statsCache.repo = repo
       this.emit('change', this.statsCache)
@@ -95,6 +93,8 @@ module.exports = class StatsPoller extends EventEmitter {
     if (!this.poll.peers) {
       return next()
     }
+
+    debug('Polling peer stats')
 
     this.ipfs.swarm.peers().then((peers) => {
       this._handlePeers(peers)
@@ -120,15 +120,7 @@ module.exports = class StatsPoller extends EventEmitter {
         }
       }
 
-      if (!this.locationsCache[peer.id]) {
-        lookupPretty(this.ipfs, [peer.addr], (err, result) => {
-          if (err) { return }
-          this.locationsCache[peer.id] = result
-        })
-      } else {
-        peer.location = this.locationsCache[peer.id]
-      }
-
+      peer.location = this.locations.get(peer.addr)
       peers.push(peer)
     })
 
@@ -143,6 +135,7 @@ module.exports = class StatsPoller extends EventEmitter {
    */
   _handleId (raw) {
     this.statsCache.node = raw
+    this.statsCache.node.addresses.sort()
     this.statsCache.node.location = 'Unknown'
 
     lookupPretty(this.ipfs, raw.addresses, (err, location) => {
@@ -151,6 +144,8 @@ module.exports = class StatsPoller extends EventEmitter {
       this.statsCache.node.location = location && location.formatted
       this.emit('change', this.statsCache)
     })
+
+    this.emit('change', this.statsCache)
   }
 
   /**
