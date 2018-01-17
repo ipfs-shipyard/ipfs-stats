@@ -1,6 +1,6 @@
 {
   "name": "ipfs-stats",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "IPFS Stats Poller",
   "main": "index.js",
   "repository": {
@@ -23,7 +23,7 @@
   "homepage": "https://github.com/hacdias/ipfs-stats#readme",
   "dependencies": {
     "debug": "^3.1.0",
-    "ipfs-locations": "^1.0.1"
+    "ipfs-locations": "^1.0.3"
   },
   "devDependencies": {
     "pre-commit": "^1.2.2",
