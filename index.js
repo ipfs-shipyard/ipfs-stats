@@ -1,7 +1,6 @@
 const EventEmitter = require('events').EventEmitter
-const lookupPretty = require('ipfs-geoip').lookupPretty
 const debug = require('debug')('stats-poller')
-const LocationsPoller = require('./locations')
+const LocationsPoller = require('ipfs-locations')
 
 const allOptions = ['peers', 'node']
 
@@ -120,7 +119,7 @@ module.exports = class StatsPoller extends EventEmitter {
         }
       }
 
-      peer.location = this.locations.get(peer.addr)
+      peer.location = this.locations.getImmediate(peer.addr)
       peers.push(peer)
     })
 
@@ -138,12 +137,12 @@ module.exports = class StatsPoller extends EventEmitter {
     this.statsCache.node.addresses.sort()
     this.statsCache.node.location = 'Unknown'
 
-    lookupPretty(this.ipfs, raw.addresses, (err, location) => {
-      if (err) { return }
-
-      this.statsCache.node.location = location && location.formatted
-      this.emit('change', this.statsCache)
-    })
+    this.locations.get(raw.addresses)
+      .then((location) => {
+        this.statsCache.node.location = location && location.formatted
+        this.emit('change', this.statsCache)
+      })
+      .catch(this._error.bind(this))
 
     this.emit('change', this.statsCache)
   }
