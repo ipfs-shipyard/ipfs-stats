@@ -35,4 +35,3 @@ npm install --save ipfs-stats
 #### Events
 
 - `change`
-- `error`

@@ -43,7 +43,6 @@ module.exports = class StatsPoller extends EventEmitter {
    * @param {Error} error
    */
   _error (error) {
-    this.emit('error', error)
     if (error.stack) {
       debug(error.stack)
     } else {
@@ -142,7 +141,7 @@ module.exports = class StatsPoller extends EventEmitter {
         this.statsCache.node.location = location && location.formatted
         this.emit('change', this.statsCache)
       })
-      .catch(this._error.bind(this))
+      .catch((e) => { this._error(e) })
 
     this.emit('change', this.statsCache)
   }
