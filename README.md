@@ -3,7 +3,7 @@
 [![npm](https://img.shields.io/npm/v/ipfs-stats.svg?style=flat-square)](https://www.npmjs.com/package/ipfs-stats)
 [![Travis](https://img.shields.io/travis/hacdias/ipfs-stats.svg?style=flat-square)](https://travis-ci.org/hacdias/ipfs-stats)
 
-This lets you create a menubar very easily with Electron.
+This lets you poll peer and node stats from IPFS very easily.
 
 ## Install
 

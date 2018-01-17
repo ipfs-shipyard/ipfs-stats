@@ -34,7 +34,7 @@ module.exports = class StatsPoller extends EventEmitter {
 
     debug('Fetching self ID')
     this.ipfs.id()
-      .then((id) => {this._handleId(id)})
+      .then((id) => { this._handleId(id) })
       .catch(this._error.bind(this))
   }
 

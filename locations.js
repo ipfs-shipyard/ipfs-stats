@@ -73,7 +73,7 @@ module.exports = class LocationsPoller {
     lookupPretty(this.ipfs, [this.fetching], (err, result) => {
       if (err) {
         next()
-        return debug (err)
+        return debug(err)
       }
 
       this.cache[this.fetching] = result
