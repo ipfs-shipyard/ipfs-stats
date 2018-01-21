@@ -15,7 +15,10 @@
     "events",
     "geoip"
   ],
-  "author": "Henrique Dias <hacdias@gmail.com>",
+  "author": "IPFS",
+  "contributors": [
+    "Henrique Dias <hacdias@gmail.com>"
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/hacdias/ipfs-stats/issues"
@@ -26,11 +29,18 @@
     "ipfs-locations": "^1.0.3"
   },
   "devDependencies": {
-    "pre-commit": "^1.2.2",
-    "standard": "^10.0.3"
+    "aegir": "^12.3.0",
+    "pre-commit": "^1.2.2"
   },
   "scripts": {
-    "lint": "standard"
+    "lint": "aegir lint",
+    "release": "aegir release",
+    "build": "aegir build",
+    "test": "aegir test",
+    "test:node": "aegir test --target node",
+    "test:browser": "aegir test --target browser",
+    "coverage": "aegir coverage",
+    "coverage-publish": "aegir coverage --upload"
   },
   "pre-commit": [
     "lint"

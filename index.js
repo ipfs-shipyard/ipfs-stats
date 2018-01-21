@@ -1,3 +1,5 @@
+'use strict'
+
 const EventEmitter = require('events').EventEmitter
 const debug = require('debug')('stats-poller')
 const LocationsPoller = require('ipfs-locations')
@@ -12,6 +14,7 @@ module.exports = class StatsPoller extends EventEmitter {
   /**
    * Stats Poller constructor.
    * @param {IpfsApi} ipfs
+   * @param {Number} frequency
    */
   constructor (ipfs, frequency = 1000) {
     super()
@@ -42,6 +45,7 @@ module.exports = class StatsPoller extends EventEmitter {
    * Logs the erros using the provided logger function.
    * @private
    * @param {Error} error
+   * @return {Void}
    */
   _error (error) {
     if (error.stack) {
@@ -55,6 +59,7 @@ module.exports = class StatsPoller extends EventEmitter {
    * Poll Manager.
    * @param {String} name
    * @param {Function} fn
+   * @return {Void}
    */
   _pollManager (name, fn) {
     const next = () => {
@@ -62,7 +67,7 @@ module.exports = class StatsPoller extends EventEmitter {
       this.pollScheduled[name] = true
       fn(done)
     }
-    
+
     const done = () => {
       setTimeout(() => {
         process()
@@ -75,7 +80,7 @@ module.exports = class StatsPoller extends EventEmitter {
         this.pollScheduled[name] = false
         return
       }
-      
+
       next()
     }
 
@@ -85,6 +90,7 @@ module.exports = class StatsPoller extends EventEmitter {
   /**
    * Poll node stats.
    * @private
+   * @param {Function} done
    * @return {Void}
    */
   _pollNodeStats (done) {
@@ -103,6 +109,7 @@ module.exports = class StatsPoller extends EventEmitter {
   /**
    * Poll peers.
    * @private
+   * @param {Function} done
    * @return {Void}
    */
   _pollPeerStats (done) {
@@ -116,6 +123,7 @@ module.exports = class StatsPoller extends EventEmitter {
    * Handle the Peers.
    * @private
    * @param {Object} raw - Raw Peers
+   * @return {Void}
    */
   _handlePeers (raw) {
     const peers = []
@@ -142,6 +150,7 @@ module.exports = class StatsPoller extends EventEmitter {
    * Handle the raw ID.
    * @private
    * @param {Object} raw - Raw ID
+   * @return {Void}
    */
   _handleId (raw) {
     this.statsCache.node = raw
