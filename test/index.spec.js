@@ -16,7 +16,7 @@ describe('stats poller', () => {
     // before step
     this.timeout(60 * 1000)
 
-    df.spawn((err, node) => {
+    df.spawn({disposable: true}, (err, node) => {
       expect(err).to.be.null
       ipfsd = node
 
