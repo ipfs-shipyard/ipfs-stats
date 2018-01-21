@@ -22,14 +22,15 @@ npm install --save ipfs-stats
 
 #### Properties
 
-- `poller.stats` retrieves the current stats. It should contain the fields `bw`, `node`, `peers` and `repo`.
+- `poller.stats` retrieves the current stats. It should contain the fields `bw`, `id`, `peers` and `repo`.
     
 #### Methods
 
 - `poller.start([opts])` tells the poller to start polling the `opts`.
 - `poller.stop([opts])` tells the poller to stop polling the `opts`.
 
-`opts` is an Array of strings. Default is `['peers', 'node']`.
+`opts` is an Array of strings. Default is `['bw', 'id', 'peers', 'repo']`. Beware that the `id` poller only runs once because
+the ID stats are the same throughout the lifespan of the daemon.
 
 
 #### Events
