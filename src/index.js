@@ -117,6 +117,7 @@ module.exports = class StatsPoller extends EventEmitter {
    * Handle the raw ID.
    * @private
    * @param {Object} raw - Raw ID
+   * @param {Function} done
    * @return {Void}
    */
   _handleId (raw, done) {
@@ -139,6 +140,7 @@ module.exports = class StatsPoller extends EventEmitter {
    * Handle the Peers.
    * @private
    * @param {Object} raw - Raw Peers
+   * @param {Function} done
    * @return {Void}
    */
   _handlePeers (raw, done) {

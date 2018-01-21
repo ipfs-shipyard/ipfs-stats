@@ -39,9 +39,7 @@
     "lint": "aegir lint",
     "release": "aegir release",
     "build": "aegir build",
-    "test": "aegir test",
-    "test:node": "aegir test --target node",
-    "test:browser": "aegir test --target browser",
+    "test": "aegir test --target node",
     "coverage": "aegir coverage",
     "coverage-publish": "aegir coverage --upload"
   },

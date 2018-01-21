@@ -17,7 +17,7 @@ describe('stats poller', () => {
     this.timeout(60 * 1000)
 
     df.spawn({disposable: true}, (err, node) => {
-      expect(err).to.be.null
+      expect(err).to.be.null // eslint-disable-line no-unused-expressions
       ipfsd = node
 
       poller = new StatsPoller(node.api, 500)
