@@ -4,3 +4,4 @@ yarn.lock
 dist
 coverage
 .nyc_output
+docs
