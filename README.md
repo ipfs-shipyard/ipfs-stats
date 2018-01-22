@@ -23,7 +23,7 @@ const StatsPoller = require('ipfs-stats')
 
 ### In the Browser through `<script>` tag
 
-Loading this module through a script tag will make the ```StatsPoller``` obj available in the global namespace.
+Loading this module through a script tag will make the ```IpfsStats``` obj available in the global namespace.
 
 ```
 <script src="https://unpkg.com/ipfs-stats/dist/index.min.js"></script>
