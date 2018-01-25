@@ -1,3 +1,13 @@
+<a name="1.2.1"></a>
+## [1.2.1](https://github.com/hacdias/ipfs-stats/compare/v1.2.0...v1.2.1) (2018-01-25)
+
+
+### Bug Fixes
+
+* use the correct function to get repo stats ([b620618](https://github.com/hacdias/ipfs-stats/commit/b620618))
+
+
+
 <a name="1.2.0"></a>
 # 1.2.0 (2018-01-22)
 
