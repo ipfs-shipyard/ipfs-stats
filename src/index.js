@@ -45,7 +45,7 @@ module.exports = class StatsPoller extends EventEmitter {
         then: (done, s) => { done(s) }
       }),
       repo: makePoller({
-        do: () => this.ipfs.repo.stat(),
+        do: () => this.ipfs.stats.repo(),
         then: (done, s) => { done(s) }
       }),
       peers: makePoller({
