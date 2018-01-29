@@ -1,3 +1,18 @@
+<a name="1.2.4"></a>
+## [1.2.4](https://github.com/ipfs-shipyard/ipfs-stats/compare/v1.2.3...v1.2.4) (2018-01-29)
+
+
+### Bug Fixes
+
+* linting ([eb8a5a5](https://github.com/ipfs-shipyard/ipfs-stats/commit/eb8a5a5))
+
+
+### Features
+
+* different frequencies for different pollers ([832e4d6](https://github.com/ipfs-shipyard/ipfs-stats/commit/832e4d6))
+
+
+
 <a name="1.2.3"></a>
 ## [1.2.3](https://github.com/hacdias/ipfs-stats/compare/v1.2.2...v1.2.3) (2018-01-29)
 
