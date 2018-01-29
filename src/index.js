@@ -27,7 +27,7 @@ function makeFrequency (freq) {
     if (freq[opt]) {
       obj[opt] = freq[opt]
     } else {
-      obj[opt] = freq['all']
+      obj[opt] = freq.all
     }
   })
 
