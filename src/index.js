@@ -15,6 +15,25 @@ function makePoller (obj) {
   }
 }
 
+function makeFrequency (freq) {
+  const obj = {}
+
+  if (Number.isInteger(freq)) {
+    allOptions.forEach(opt => {obj[opt] = freq})
+    return obj
+  }
+
+  allOptions.forEach((opt) => {
+    if (freq[opt]) {
+      obj[opt] = freq[opt]
+    } else {
+      obj[opt] = freq['all']
+    }
+  })
+
+  return obj
+}
+
 /**
  * It's a Stats Poller.
  * @extends EventEmitter
@@ -30,7 +49,7 @@ module.exports = class StatsPoller extends EventEmitter {
 
     // Start the variables!
     this.ipfs = ipfs
-    this.frequency = frequency
+    this.frequency = makeFrequency(frequency)
     this.statsCache = {}
     this.locations = new LocationsPoller(ipfs)
 
@@ -109,7 +128,7 @@ module.exports = class StatsPoller extends EventEmitter {
       // Schedule the next polling.
       setTimeout(() => {
         execute()
-      }, this.frequency)
+      }, this.frequency[name])
     }
 
     execute()
