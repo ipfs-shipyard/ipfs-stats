@@ -19,7 +19,7 @@ function makeFrequency (freq) {
   const obj = {}
 
   if (Number.isInteger(freq)) {
-    allOptions.forEach(opt => {obj[opt] = freq})
+    allOptions.forEach(opt => { obj[opt] = freq })
     return obj
   }
 
