@@ -1,3 +1,13 @@
+<a name="1.2.2"></a>
+## [1.2.2](https://github.com/hacdias/ipfs-stats/compare/v1.2.1...v1.2.2) (2018-01-29)
+
+
+### Bug Fixes
+
+* almost concurrent calls ([8101508](https://github.com/hacdias/ipfs-stats/commit/8101508))
+
+
+
 <a name="1.2.1"></a>
 ## [1.2.1](https://github.com/hacdias/ipfs-stats/compare/v1.2.0...v1.2.1) (2018-01-25)
 
