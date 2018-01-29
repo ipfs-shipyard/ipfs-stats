@@ -79,8 +79,9 @@ module.exports = class StatsPoller extends EventEmitter {
    * @return {Void}
    */
   _pollManager (name) {
+    this.pollers[name].stop = false
+
     if (this.pollers[name].running) {
-      this.pollers[name].stop = false
       return
     }
 
