@@ -80,6 +80,7 @@ module.exports = class StatsPoller extends EventEmitter {
    */
   _pollManager (name) {
     if (this.pollers[name].running) {
+      this.pollers[name].stop = false
       return
     }
 
