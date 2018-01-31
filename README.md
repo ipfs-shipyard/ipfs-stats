@@ -10,7 +10,7 @@ This lets you poll peer and node stats from IPFS very easily.
 ### In Node.js through npm
 
 ```bash
-$ npm install --save is-ipfs
+$ npm install --save ipfs-stats
 ```
 
 ### Browser: Browserify, Webpack, other bundlers
