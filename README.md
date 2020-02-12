@@ -1,3 +1,5 @@
+## ⚠️ **THIS PACKAGE IS NO LONGER MAINTAINED!**
+
 # ipfs-stats
 
 [![npm](https://img.shields.io/npm/v/ipfs-stats.svg?style=flat-square)](https://www.npmjs.com/package/ipfs-stats)
